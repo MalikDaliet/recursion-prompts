@@ -38,7 +38,7 @@ var arraySum = function (array) {
     //check if the array is storing numbers 
     if (typeof array[i] === "number") {
       //add the index to a stored number 
-    num += array[i]
+      num += array[i]
     }
     else if (Array.isArray(array[i])) {
       num += arraySum(array[i]); // Recursively call for nested arrays
@@ -49,12 +49,33 @@ var arraySum = function (array) {
 
 // 4. Check if a number is even.
 var isEven = function (n) {
+
+  if (n < 0) {
+    return isEven(-n)
+  }
+  if (n === 0) {
+    return true
+  }
+  if (n === 1) {
+    return false
+  }
+  return isEven(n - 2)
 };
 
 // 5. Sum all integers below a given integer.
 // sumBelow(10); // 45
 // sumBelow(7); // 21
 var sumBelow = function (n) {
+
+  if (n === 0) {
+    return 0
+  }
+  if (n > 0) {
+    return (n - 1) + sumBelow(n - 1); // does the positive inputs
+  }
+  else {return (n + 1) + sumBelow(n + 1); // handles negative input
+  }
+
 };
 
 // 6. Get the integers in range (x, y).

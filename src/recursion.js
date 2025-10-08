@@ -147,19 +147,32 @@ var palindrome = function (string) {
   edge case: ignore spaces and capital letters 
   */
   // check if the frist letter is not the same as the last letter 
+  // we need to make this case insensitive
+  string = string.toLowerCase()
+  // If the first character is a space skip it
+  if (string[0] === ' ') {
+    return palindrome(string.slice(1));
+  }
+  // If the last character is a space skip it
+  if (string[string.length - 1] === ' ') {
+    return palindrome(string.slice(0, -1));
+  }
+
   if (string[0] !== string[string.length - 1]) {
     return false
   }
+  if (string.length <= 1) {
+    return true
+  }
   // check if the frist letter is the same as the last letter 
   //take away the values at the first and last index
-  string.splice()
-  
+  // string.splice()
 
-  
+
   // the new string should be the arguement for the function call 
-  
-  //aloha
-  return true
+
+
+  return palindrome(string.slice(1, -1))
 };
 
 // 11. Write a function that returns the remainder of x divided by y without using the
@@ -168,15 +181,43 @@ var palindrome = function (string) {
 // modulo(17,5) // 2
 // modulo(22,6) // 4
 var modulo = function (x, y) {
-  // if (){
-  //   return x / y
-  // }
+  // make a var that stores an amount 
+  // let total = x / y;
+
+  //   return total
+  // modulo()
+  //return x - y * Math.floor(x / y)
+
+  // if (y === 0) throw new Error("Division by zero");
+
+  // // Handle negative numbers
+  // if (x < 0) return -modulo(-x, y);
+  // if (y < 0) return modulo(x, -y);
+
+  // // Base case: if x < y, remainder is x
+  // if (x < y) return x;
+
+  // // Recursive step: subtract y and call again
+  // return modulo(x - y, y);
 };
+
+// 5* 11
+// 5 +5 +5...
+//4*11
+//4 + 4 +4 ...
+
 
 // 12. Write a function that multiplies two numbers without using the * operator  or
 // JavaScript's Math object.
 // ATTENTION DO NOT LEAVE COMMENTS IN THIS FUNCTION. The test is looking for any ('/').
 var multiply = function (x, y) {
+  if (x === 1) {
+    return y
+  }
+  if (x === 0) {
+    return 0
+  }
+
 };
 
 // 13. Write a function that divides two numbers without using the / operator  or

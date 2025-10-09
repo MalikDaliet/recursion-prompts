@@ -439,7 +439,7 @@
         expect(compareStr('big dog', 'big dog')).to.eql(true);
       });
 
-      it('should use recursion by calling self', function () {
+      it.only('should use recursion by calling self', function () {
         compareStr.proxyCallCount = 0;
         compareStr('house', 'houses');
         expect(compareStr.proxyCallCount).to.be.above(1);

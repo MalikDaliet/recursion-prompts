@@ -92,10 +92,10 @@ var range = function (x, y) {
     return []
   }
   //if(x + 1 < y)return
-  if(x > y){
-   return [x-1].concat(range(x - 1, y)) // count down
+  if (x > y) {
+    return [x - 1].concat(range(x - 1, y)) // count down
   }
-  if(x < y ){
+  if (x < y) {
     return [x + 1].concat(range(x + 1, y)) // count up
 
   }
@@ -289,28 +289,54 @@ var compareStr = function (str1, str2) {
 // 16. Write a function that accepts a string and creates an array where each letter
 // occupies an index of the array.
 var createArray = function (str) {
-  var arr = []
+  //if string is empty return an empty arr
+  if (str.length === 0) { return [] } //stop condition/ base case
+  // starts at the begining of the string and to the rest of the string
+  return [str[0]].concat(createArray(str.slice(1)));
 };
 
 // 17. Reverse the order of an array
+//if the 0 or 1 element it cant be reverse
 var reverseArr = function (array) {
+  if (array.length <= 1) { return array } // base case
+  //start from the last index and keep going down till be are at the first index
+  return [array[array.length - 1]].concat(reverseArr(array.slice(0, -1)));
+
 };
 
 // 18. Create a new array with a given value and length.
 // buildList(0,5) // [0,0,0,0,0]
 // buildList(7,3) // [7,7,7]
 var buildList = function (value, length) {
+  // if the length is 0 return an empty arr
+  if (length === 0) { return [] }
+  return [value].concat(buildList(value, length - 1))
 };
 
 // 19. Count the occurence of a value inside a list.
 // countOccurrence([2,7,4,4,1,4], 4) // 3
 // countOccurrence([2,'banana',4,4,1,'banana'], 'banana') // 2
 var countOccurrence = function (array, value) {
+  //if array is empty return 0
+  if (array.length === 0) { return 0 }
+  //check the first element, then recurse on the rest of the array
+  const countForFirst = array[0] === value ? 1 : 0;
+  //recursive call on the remaining elements
+  return countForFirst + countOccurrence(array.slice(1), value);
+
 };
 
 // 20. Write a recursive version of map.
 // rMap([1,2,3], timesTwo); // [2,4,6]
 var rMap = function (array, callback) {
+  //check if array is empty an return an empty array
+  if (array.length === 0) { return [] }
+  //apply the callback to the first element
+  const firstResult = callback(array[0]);
+  //recursively map the rest of the array
+  const restResult = rMap(array.slice(1), callback);
+  //combine and return
+  return [firstResult].concat(restResult);
 };
 
 // 21. Write a function that counts the number of times a key occurs in an object.
@@ -318,6 +344,18 @@ var rMap = function (array, callback) {
 // countKeysInObj(testobj, 'r') // 1
 // countKeysInObj(testobj, 'e') // 2
 var countKeysInObj = function (obj, key) {
+  let count = 0;
+
+  //loop through all keys in the current object
+  for (let k in obj) {
+    //if the key matches, increase count
+    if (k === key) { count++; }
+    //if the value is an object, recurse deeper
+    if (typeof obj[k] === 'object' && obj[k] !== null) {
+      count += countKeysInObj(obj[k], key);
+    }
+  }
+  return count;
 };
 
 // 22. Write a function that counts the number of times a value occurs in an object.
@@ -325,11 +363,46 @@ var countKeysInObj = function (obj, key) {
 // countValuesInObj(testobj, 'r') // 2
 // countValuesInObj(testobj, 'e') // 1
 var countValuesInObj = function (obj, value) {
+  let count = 0;
+
+  //loop through all keys in the current object
+  for (let k in obj) {
+    //if the key matches, increase count
+    if (k === value) { count++; }
+    //if the value is an object, recurse deeper
+    if (typeof obj[k] === 'object' && obj[k] !== null) {
+      count += countKeysInObj(obj[k], value);
+    }
+  }
+  return count;
 };
 
 // 23. Find all keys in an object (and nested objects) by a provided name and rename
 // them to a provided new name while preserving the value stored at that key.
 var replaceKeysInObj = function (obj, key, newKey) {
+  if (Array.isArray(obj)) {
+    // If it's an array, iterate and recurse into each element
+    for (let i = 0; i < obj.length; i++) {
+      if (typeof obj[i] === 'object' && obj[i] !== null) {
+        // Use splice if you want to replace the object at this position (optional)
+        obj.splice(i, 1, replaceKeysInObj(obj[i], oldKey, newKey)); // i used splice to keep the original array but it makes an alternate array keep our original 
+      }
+    }
+  } else if (typeof obj === 'object' && obj !== null) {
+    for (let key in obj) {
+      if (key === oldKey) {
+        obj[newKey] = obj[key]; // copy value to new key
+        delete obj[key];        // delete old key
+        key = newKey;           // update the key variable
+      } 
+      // Recurse deeper if the value is an object or array
+      if (typeof obj[key] === 'object' && obj[key] !== null) {
+        replaceKeysInObj(obj[key], oldKey, newKey);
+      }
+    }
+  }
+
+  return obj;
 };
 
 // 24. Get the first n Fibonacci numbers.  In the Fibonacci Sequence, each subsequent
@@ -338,6 +411,14 @@ var replaceKeysInObj = function (obj, key, newKey) {
 // fibonacci(5);  // [0, 1, 1, 2, 3, 5]
 // Note:  The 0 is not counted.
 var fibonacci = function (n) {
+  if (n === 0) return [0, 1];  // start sequence
+  if (n === 1) return [0, 1, 1];
+  const seq = fibonacci(n - 1);
+  //takes the previos idex and adds it to the current index
+  seq.push(seq[seq.length - 1] + seq[seq.length - 2]);
+
+  return seq;
+
 };
 
 // 25. Return the Fibonacci number located at index n of the Fibonacci sequence.
@@ -346,17 +427,32 @@ var fibonacci = function (n) {
 // nthFibo(7); // 13
 // nthFibo(3); // 2
 var nthFibo = function (n) {
+  if (n <= 0) return 0;  // start sequence
+  if (n === 1) return 1;
+  return nthFibo(n - 1)+ nthFibo(n - 2)
+
+  //  NOT DONE YET
 };
 
 // 26. Given an array of words, return a new array containing each word capitalized.
 // var words = ['i', 'am', 'learning', 'recursion'];
 // capitalizedWords(words); // ['I', 'AM', 'LEARNING', 'RECURSION']
 var capitalizeWords = function (input) {
+  //checks if the array is empty
+  if(input.length === 0 ){return []}
+  //capitalizes the first word
+  let firstWord = input[0].toUpperCase()
+  //capitalizes the rest of the rest of the array/ string
+ let restCap = capitalizeWords(input.slice(1))
+ //add the vars and recurse
+ return [firstWord].concat(restCap)
 };
 
 // 27. Given an array of strings, capitalize the first letter of each index.
 // capitalizeFirst(['car', 'poop', 'banana']); // ['Car', 'Poop', 'Banana']
 var capitalizeFirst = function (array) {
+   String(val).charAt(0).toUpperCase() + String(val).slice(1);
+   //I STOPPED HERE 
 };
 
 // 28. Return the sum of all even numbers in an object containing nested objects.

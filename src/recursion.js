@@ -427,7 +427,8 @@ var fibonacci = function (n) {
 // nthFibo(7); // 13
 // nthFibo(3); // 2
 var nthFibo = function (n) {
-  if (n <= 0) return 0;  // start sequence
+  if (n === 0) return 0;
+  if (n < -1) return null  // start sequence
   if (n === 1) return 1;
   return nthFibo(n - 1)+ nthFibo(n - 2)
 
@@ -450,9 +451,20 @@ var capitalizeWords = function (input) {
 
 // 27. Given an array of strings, capitalize the first letter of each index.
 // capitalizeFirst(['car', 'poop', 'banana']); // ['Car', 'Poop', 'Banana']
+
+// INPUT: an array of strings
+// OUTPUT: an array of the strings with the first letter capitalized
+// CONSTRANTS: 
+//EDGE CASES: if the array is empty return an empty arr
 var capitalizeFirst = function (array) {
-   String(val).charAt(0).toUpperCase() + String(val).slice(1);
-   //I STOPPED HERE 
+  // if the length of the array is 0 return false
+  if(array.length === 0){return []}
+   //String(array).charAt(0).toUpperCase() + String(array).slice(1);
+ // at every index of the arr, we want the first char to be capitalized
+  let first = array[0].charAt(0).toUpperCase() + array[0].slice(1)
+  console.log(array,first)
+  let rest = capitalizeFirst(array.slice(1))
+  return [first].concat(rest)
 };
 
 // 28. Return the sum of all even numbers in an object containing nested objects.
@@ -474,7 +486,16 @@ var flatten = function (arrays) {
 
 // 30. Given a string, return an object containing tallies of each letter.
 // letterTally('potato'); // {'p':1, 'o':2, 't':2, 'a':1}
-var letterTally = function (str, obj) {
+var letterTally = function (str, obj = {}) {
+  //check if theirs any letters in the array and return obj
+  if (str.length === 0) {
+    return obj;
+  }
+
+  var char = str[0];
+  obj[char] = (obj[char] || 0) + 1;
+
+  return letterTally(str.slice(1), obj);
 };
 
 // 31. Eliminate consecutive duplicates in a list.  If the list contains repeated
@@ -483,6 +504,14 @@ var letterTally = function (str, obj) {
 // Example: compress([1, 2, 2, 3, 4, 4, 5, 5, 5]) // [1, 2, 3, 4, 5]
 // Example: compress([1, 2, 2, 3, 4, 4, 2, 5, 5, 5, 4, 4]) // [1, 2, 3, 4, 2, 5, 4]
 var compress = function (list) {
+  let result =[]
+  //check if the length is 0 and return an empty arr
+  if(list.length === 0){return result}
+ //if result is empty or if the first index of list doesn't equal results last index
+  if (result.length === 0 || list[0] !== result[result.length - 1]) {
+    result.push(list[0]);}
+      return compress(list.slice(1), result);
+
 };
 
 // 32. Augment every element in a list with a new value where each element is an array
